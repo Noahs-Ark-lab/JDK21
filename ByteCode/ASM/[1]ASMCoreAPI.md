@@ -89,17 +89,18 @@ local variables是一个数组
   
 + 9、MethodVisitor代码示例
 + label介绍
-  程序设计中，有三种基本控制结构：顺序 选择 和循环，在bytecode层面，只存在两种 顺序（sequence）和跳转（jump）两种指令执行顺序 instruction
+
+程序设计中，有三种基本控制结构：顺序 选择 和循环，在bytecode层面，只存在两种 顺序（sequence）和跳转（jump）两种指令执行顺序 instruction
   那么ASM中的label类的作用是什么？MethodVisitor类是用于生成方法体的代码，如果没有label类的参与，那么MethodVisitor类只能生成顺序结构的代码，如果有label类的参与，那么MethodVisitor类就能生成选择和循环结构的代码
   
 + 11、Label代码示例
- 通过ASM生成.class文件
-通过ASM生成HelloWorldNext.java对应的字节码，其中目标.class如下所示。HelloWorldNext.java---->HelloWorldNext.class
+ 通过ASM生成.class文件  
+通过ASM生成HelloWorldNext.java对应的字节码，其中目标.class如下所示。HelloWorldNext.java---->HelloWorldNext.class  
 
-首先对FileUtils使用，在target/classes目录下生成.class文件
-定义相对路径，比如文件夹samples下生成HelloWorldNext.class   String relative_path="samples/HelloWorldNext.class"
-获取编译之后的绝对路径。 String filePath = FileUtils.getFilePath(relative_path);
-
+首先对FileUtils使用，在target/classes目录下生成.class文件  
+定义相对路径，比如文件夹samples下生成HelloWorldNext.class   String relative_path="samples/HelloWorldNext.class"  
+获取编译之后的绝对路径。 String filePath = FileUtils.getFilePath(relative_path);  
+ 
 ```
 
 ```
