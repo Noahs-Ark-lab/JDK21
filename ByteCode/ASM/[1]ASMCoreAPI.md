@@ -158,7 +158,7 @@ public static byte[] dump() throws Exception{
 visitFieldLnsn:访问 某个成员变量的指令，支持GETSTATIC,PUTSTATIC,GETFIELD,PUTFIELD
 visitFrame: 访问当前局部变量表和操作数栈中元素的状态，参数就是局部变量表和操作数栈的内容
 visitlinclnsn: 访问自增指令
-visitVarLnsn:访问局部变量指令，就是取局部变量变的值放入操作数栈
+visitVarLnsn:访问局部变量指令，就是取局部变量的值放入操作数栈   操作码是ILOAD   LLOAD  FLOAD DLOAD ALOAD  ISTORE  FSTORE DSTOER ASTORE or RET
 visitMethodlnsn:访问方法指令，就是调用某个方法，支持INVOKEVIRTUAL,INVOKESPECIAL INVOKESTATIC INVOKEINTERFACE
 visitlnsn:访问无操作数的指令，例如 nop duo等等
 visitTypelnsn:访问type指令，即将一个类的全限定名作为参数然后new一个对象压入操作数栈中
@@ -169,6 +169,10 @@ visitTypelnsn:访问type指令，即将一个类的全限定名作为参数然�
 [ASM使用](https://www.cnblogs.com/tr1ple/p/12800859.html)
 [局部变量表和操作数栈](https://juejin.cn/post/6844903693553238023)
 [ASM](https://blog.csdn.net/it_freshman/article/details/81156106)
+[ASM api](https://cloud.tencent.com/developer/article/1633443)
+[ASM接口、方法、组件](https://www.innereye.cn/2016/09/26/asm/4/Manual_ASM_3.2_Method_Interfaces_And_Components/)
+[ASM字节码操作类库(打开java语言世界通往字节码世界的大门](https://developer.jdcloud.com/article/3435)
+[B栈相关](https://www.bilibili.com/read/cv13433468/)
 
 + 12、frame介绍
 + 13、Opcodes介绍
