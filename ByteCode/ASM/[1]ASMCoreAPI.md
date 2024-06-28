@@ -146,15 +146,28 @@ public static byte[] dump() throws Exception{
 
             // 第 3 段
             mv2.visitLabel(returnLabel);
-            mv2.visitInsn(RETURN);
-            mv2.visitMaxs(0, 0);
+            mv2.visitInsn(RETURN);   
+            mv2.visitMaxs(0, 0);       // 其中 visitCode()  visitMaxs()   visitEnd()仅执行一次，标志着方法字节码访问的开始和结束
             mv2.visitEnd();
   }
  classWriter.visitEnd();
         return classWriter.toByteArray();
 }
 ```
+常用api：
+visitFieldLnsn:访问 某个成员变量的指令，支持GETSTATIC,PUTSTATIC,GETFIELD,PUTFIELD
+visitFrame: 访问当前局部变量表和操作数栈中元素的状态，参数就是局部变量表和操作数栈的内容
+visitlinclnsn: 访问自增指令
+visitVarLnsn:访问局部变量指令，就是取局部变量变的值放入操作数栈
+visitMethodlnsn:访问方法指令，就是调用某个方法，支持INVOKEVIRTUAL,INVOKESPECIAL INVOKESTATIC INVOKEINTERFACE
+visitlnsn:访问无操作数的指令，例如 nop duo等等
+visitTypelnsn:访问type指令，即将一个类的全限定名作为参数然后new一个对象压入操作数栈中
 
+参考：
+[ASM指南｜计算机技术实践](https://mwping.github.io/android/asm.html)
+[ASM code](https://github.com/AndroidAdvanceWithGeektime/Chapter-ASM/blob/master/asm-gradle-plugin/src/main/java/com/geektime/asm/ASMCode.java)
+[ASM使用](https://www.cnblogs.com/tr1ple/p/12800859.html)
+[局部变量表和操作数栈](https://juejin.cn/post/6844903693553238023)
 
 + 12、frame介绍
 + 13、Opcodes介绍
@@ -193,6 +206,9 @@ public static byte[] dump() throws Exception{
 asm-commons.jar和asm-util的区别，
 asm-util.jar提供的是通用性的功能，没有特别明确的使用场景，而在asm-commons.jar里，它提供的功能，都是为解决某一种特定场景中出现的问题而提出的解决思路
 asm-util.jar 和asm-commons.jar两者都对asm.jar  asm-tree.jar asm-analysis.jar有依赖
+
+> asm.jar  和 asm-util.jar的使用
+> 通过asm.jar和asm-util.jar输出现有.java文件的 asm 生成.class的代码文件[asmifier的使用](https://blog.csdn.net/yizhizouxiaqu/article/details/7636884)
   
 + 2、CheckClassAdapter介绍
 + 3、TraceClassVisitor介绍
