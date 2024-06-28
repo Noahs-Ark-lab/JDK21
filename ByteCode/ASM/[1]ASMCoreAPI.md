@@ -88,7 +88,7 @@ local variables是一个数组
  如果当前方法的参数是long double类型 那么它在local variable当中占用2个位置
   
 + 9、MethodVisitor代码示例
-+ label介绍
++ 10、label介绍
 
 程序设计中，有三种基本控制结构：顺序 选择 和循环，在bytecode层面，只存在两种 顺序（sequence）和跳转（jump）两种指令执行顺序 instruction
   那么ASM中的label类的作用是什么？MethodVisitor类是用于生成方法体的代码，如果没有label类的参与，那么MethodVisitor类只能生成顺序结构的代码，如果有label类的参与，那么MethodVisitor类就能生成选择和循环结构的代码
@@ -98,11 +98,61 @@ local variables是一个数组
 通过ASM生成HelloWorldNext.java对应的字节码，其中目标.class如下所示。HelloWorldNext.java---->HelloWorldNext.class  
 
 首先对FileUtils使用，在target/classes目录下生成.class文件  
+
 定义相对路径，比如文件夹samples下生成HelloWorldNext.class   String relative_path="samples/HelloWorldNext.class"  
+
 获取编译之后的绝对路径。 String filePath = FileUtils.getFilePath(relative_path);  
+
+获取 asm生成的字节码文件 byte[] 通过FileUtils.writeBytes(filePath,bytes);将byte[]数组写入对应的路径 
+[filePath](/Users/liulei318/Documents/goldstine_workspace/coding/Github/learn-java-asm/target/classes/sample/HelloWorldNext.class)
+[写入byte数组](file:///Users/liulei318/Documents/goldstine_workspace/coding/Github/learn-java-asm/target/classes/sample/HelloWorldNext.class)
  
 ```
+public static byte[] dump() throws Exception{
+  //获取字节码输出asm ClassWriter
+  ClassWriter classWriter=new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+  //定义classWriter对应的属性，classFile版本 访问标志accessFlag 等
+  classWriter.visit(V1_8,ACC_PUBLIC+ACC_SUPER,"sample/HelloWorldNext",null,"java/lang/Object",null);
+  {
+    // 获取MethodVisitor对象，首先获取构造方法的字节码
+    MethodVisitor mv1 = classWriter.visitMethod(ACC_PUBLIC,"<init>","()V",null,null);
+    mv1.visitCode();
+    mv1.visitVarInsn(ALOAD,0);
+    mv1.visitMethodInsn(INVOKESPECIAL,"java/lang/Object","<init>","()V",false);
+    mv1.visitInsn(RETURN);
+    mv1.visitMaxs(0,0);
 
+    mv1.visitEnd();
+     
+  }
+  {
+    MethodVisitor mv2 = classWriter.visitMethod(ACC_PUBLIC, "test", "(I)V", null, null);
+            Label elseLabel = new Label();
+            Label returnLabel = new Label();
+
+            mv2.visitCode();
+            mv2.visitVarInsn(ILOAD,1);
+            mv2.visitJumpInsn(IFNE,elseLabel);
+            mv2.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+            mv2.visitLdcInsn("value is 0");
+            mv2.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+            mv2.visitJumpInsn(GOTO, returnLabel);
+
+
+            mv2.visitLabel(elseLabel);
+            mv2.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+            mv2.visitLdcInsn("value is not 0");
+            mv2.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+
+            // 第 3 段
+            mv2.visitLabel(returnLabel);
+            mv2.visitInsn(RETURN);
+            mv2.visitMaxs(0, 0);
+            mv2.visitEnd();
+  }
+ classWriter.visitEnd();
+        return classWriter.toByteArray();
+}
 ```
 
 
