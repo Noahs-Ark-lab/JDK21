@@ -22,9 +22,33 @@ Java8 需要使用ASM5.0版本 Java11需要使用ASM7.0版本 尽可能使用更
 
 ![ASM can do: Analysis   generation transformation](./../../images/[1]ASMcando.png)
 
+**ASM的应用**:(1)asm应用于spring 动态代理 （2）jdk中的asm  lambda
+
++ 2、ASM组成部分    
+从组成结构上来说，ASM分为两个部分 一部分为 Core API 另一部分为 Tree API    
+其中Core API包括asm.jar  asm-util.jar asm-commons.jar
+其中，Tree API包括asm-tree.jar和asm-analysis.jar    
+从两者的关系来说，Core API是基础，TreeAPI是在Core API的基础上构建起来的    
+
+Core API:
+
+[1]asm.jar    
+在asm.jar文件中，一共包含30多个类，只会介绍10个类，剩下的20多个类主要起到辅助的作用，主要的十个类：ClassVisitor ClassWriter  FieldVisitor  FieldWriter  MethodVisitor  MethodWriter Label  Opcodes    
+对于修改已经存在的类，使之内容发生改变 其中会涉及到ClassReader  Type类     
+最重要的类  ClassReader  ClassVisitor   ClassWriter类    
+ClassReader:主要负责读取  .class文件类的内容 然后拆分为各个不同的部分    
+ClassVisitor:负责.class文件的某一部分里的信息进行修改    
+ClassWriter:负责将各个不同部分重新组合成一个完整的.class文件    
+
+[2]asm-util.jar
+主要包含一些工具类，这些类主要分成两种类型，Check开头和Trace开头
+
+以Check开头的类，主要负责检查生成的.class文件内容是否正确    
+以Trace开头的类，主要负责将.class文件 的内容打印成文字输出，根据输出的文字信息，可以探索或追踪Trace .class文件的内部信息    
+在asm-util.jar当中，主要介绍CheckClassAdapter 和TraceClassVisitor 类， printer ASMifier  Textifier
 
 
-+ 2、ASM组成部分
+
 + 3、ASM与ClassFile
 + 4、ClassFile快速参考
  Java ClassFile
