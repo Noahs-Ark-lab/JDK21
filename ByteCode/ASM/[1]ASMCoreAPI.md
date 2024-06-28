@@ -70,9 +70,41 @@ cp_info、field_info、method_info、attribute_info表示较为复杂的结构�
 + 6、MethodVisitor介绍
 + 7、MethodWriter介绍
 + 8、方法的初始Frame
+  JVM Architecture由 Class Loader SubSystem,Runtime Data Areas和 Execution Engine三个部分组成 ，其中Runtime Data Areas包括Method Area 、Heap Area 、stack area 、PC Register和Native Method Stack等部分
+在程序运行的过程中，每个线程Thread 都对应都对应一个属于自己的JVM Stack当一个新线程开始的时候，就会在内存上分配一个属于自己的JVM Stack；当该线程执行结束的时候，相应JVM Stack内存空间也就被回收了
+在JVM Stack 当中，存储的是stack frame,当调用一个新方法的时候，就会在JVM Stack上分配一个frame空间，入栈操作，当方法退出时，相应frame空间也会JVM Stack上进行清除，出栈操作
+在Stack Frame内存空间中，有两个重要的结构，即Local Variables 和operand stack，都会有一个开始状态和结束状态
+
+operand stack是一个栈结构
+local variables是一个数组
+对于每一个方法来说，都是在自己的stack frame上来运行的
+在编译的时候(compile time),local variables和 operand stack的空间大小就确定下来了，比如，一个.java文件经过编译之后，得到一个.class文件，对于其中的某一个方法来说，它的local variable占用10个slot空间 operand stack占用4个slot空间
+
+在运行的时候，在local variables和operand stack上存放的数据会随着方法的执行不断发生变化
+
+方法的初始化栈帧 ，operand stack是空的，不需要存储任何数据，而local variables的初始状态，则需要考虑两个因素
+ 是否需要存储this,通过判断方法是否为static,如果方法是static，则不需要存储this，如果当前方法是non-static的，则需要在local variables索引为0的位置存在一个this变量
+ 当前方法是和否接受参数，方法接收的参数，会按照声明的顺序放到local variables中，如果方法参数不是long double类型，那么它在local variable当中占用1个位置
+ 如果当前方法的参数是long double类型 那么它在local variable当中占用2个位置
+  
 + 9、MethodVisitor代码示例
-+ 10、Label介绍
++ label介绍
+  程序设计中，有三种基本控制结构：顺序 选择 和循环，在bytecode层面，只存在两种 顺序（sequence）和跳转（jump）两种指令执行顺序 instruction
+  那么ASM中的label类的作用是什么？MethodVisitor类是用于生成方法体的代码，如果没有label类的参与，那么MethodVisitor类只能生成顺序结构的代码，如果有label类的参与，那么MethodVisitor类就能生成选择和循环结构的代码
+  
 + 11、Label代码示例
+ 通过ASM生成.class文件
+通过ASM生成HelloWorldNext.java对应的字节码，其中目标.class如下所示。HelloWorldNext.java---->HelloWorldNext.class
+
+首先对FileUtils使用，在target/classes目录下生成.class文件
+定义相对路径，比如文件夹samples下生成HelloWorldNext.class   String relative_path="samples/HelloWorldNext.class"
+获取编译之后的绝对路径。 String filePath = FileUtils.getFilePath(relative_path);
+
+```
+
+```
+
+
 + 12、frame介绍
 + 13、Opcodes介绍
 +
