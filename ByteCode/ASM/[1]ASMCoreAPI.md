@@ -27,6 +27,38 @@ Java8 需要使用ASM5.0版本 Java11需要使用ASM7.0版本 尽可能使用更
 + 2、ASM组成部分
 + 3、ASM与ClassFile
 + 4、ClassFile快速参考
+ Java ClassFile
+对于一个具体的.class而言，它遵循ClassFile结构，这个数据结构位于[Java Virtual Machine Specification](https://docs.oracle.com/javase/specs/jvms/se8/html/index.html) 的[The class File format](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html)部分
+```
+ClassFile {
+    u4             magic;
+    u2             minor_version;
+    u2             major_version;
+    u2             constant_pool_count;
+    cp_info        constant_pool[constant_pool_count-1];
+    u2             access_flags;
+    u2             this_class;
+    u2             super_class;
+    u2             interfaces_count;
+    u2             interfaces[interfaces_count];
+    u2             fields_count;
+    field_info     fields[fields_count];
+    u2             methods_count;
+    method_info    methods[methods_count];
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+其中：
++ u1:表示占用1个字节
++ u2:表示占用2个字节
++ u4:表示占用4个字节
++ u8:表示占用8个字节
+cp_info、field_info、method_info、attribute_info表示较为复杂的结构，但是他们也是由u1、u2、u4和u8组成的
+相应的，在.class文件当中，定义的字段，要遵循field_info结构
+
+
+
 + 5、如何编写ASM代码
 
 ### 第二章 生成新的类 从0到1 从无到有 生成
@@ -63,7 +95,22 @@ Java8 需要使用ASM5.0版本 Java11需要使用ASM7.0版本 尽可能使用更
 
 
 ### 工具类和常用类
-+ 1、asm-util和asm-commons
++ 1、asm-util和asm-commons   
+  在asm-util中，主要介绍CheckClassAdapter和TraceClassVisitor类，在TraceClassVisitor类当中，会涉及到Printer，ASMifier和Textifier类
+｜asm-util｜CheckClassAdapter
+          ｜TraceClassVisitor|printer:ASMifier、Textifier
+            PrinterWriter
+ 其中，CheckClassAdapter类，主要负责检查(Check)生成的.class文件内容是否正确
+其中，TraceClassVisitor类，主要负责将.class文件的内容打印成文字输出，根据输出的文字信息，可以探索或追踪（Trace）.class文件内部的信息
+
+在ams-commons.jar中，包括的类比较多，主要可以分为两组ClassVisitor的子类，另一组是MethodVisitor的子类
++ 其中，ClassVisitor的子类有 ClassRemapper   StaticInitMerger  和 SerialVersionUIDAdder类
++ MethodVisitor的子类有LocalVariableSorter  GeneratorAdapter   AdviceAdapter  AnalyzerAdapter   和 InstructionAdapter类
+
+asm-commons.jar和asm-util的区别，
+asm-util.jar提供的是通用性的功能，没有特别明确的使用场景，而在asm-commons.jar里，它提供的功能，都是为解决某一种特定场景中出现的问题而提出的解决思路
+asm-util.jar 和asm-commons.jar两者都对asm.jar  asm-tree.jar asm-analysis.jar有依赖
+  
 + 2、CheckClassAdapter介绍
 + 3、TraceClassVisitor介绍
 + 4、Printer/ASMifier/Textifier
