@@ -50,6 +50,14 @@ ClassWriter:负责将各个不同部分重新组合成一个完整的.class文�
 
 
 + 3、ASM与ClassFile
+
+第一点：具体的.class文件遵循ClassFile的结构
+
+第二点：操作字节码的类库有多个，ASM只是其中的一种，但是特点是执行速度快，占用空间小
+
+第三点：ASM与ClassFile 之间的关系，形象地来说，ClassFile相当于树根，ASM相当于树根基础上的树干或者枝叶
+
+
 + 4、ClassFile快速参考
  Java ClassFile
 对于一个具体的.class而言，它遵循ClassFile结构，这个数据结构位于[Java Virtual Machine Specification](https://docs.oracle.com/javase/specs/jvms/se8/html/index.html) 的[The class File format](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html)部分
@@ -80,6 +88,10 @@ ClassFile {
 + u8:表示占用8个字节
 cp_info、field_info、method_info、attribute_info表示较为复杂的结构，但是他们也是由u1、u2、u4和u8组成的
 相应的，在.class文件当中，定义的字段，要遵循field_info结构
+
+**ClassFile结构实例**    
+[ClassFile实例仓库](https://gitee.com/lsieun/java8-classfile-tutorial)    
+本仓库参考位置：org.example.asm.classFile.ClassFileStructure    
 
 
 

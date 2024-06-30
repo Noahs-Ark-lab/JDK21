@@ -1,0 +1,23 @@
+package org.example.asm.classFile.goldstine.code.opcode;
+
+import org.example.asm.classFile.goldstine.code.Instruction;
+import org.example.asm.classFile.goldstine.code.facet.*;
+import org.example.asm.classFile.goldstine.code.visitors.OpcodeVisitor;
+import org.example.asm.classFile.goldstine.cst.OpcodeConst;
+
+/**
+ * LASTORE -  Store into long array
+ * <PRE>Stack: ..., arrayref, index, value.word1, value.word2 -&gt; ...</PRE>
+ */
+public class LASTORE extends Instruction implements ArrayInstruction, StackConsumer {
+
+    public LASTORE() {
+        super(OpcodeConst.LASTORE, 1);
+    }
+
+    @Override
+    public void accept(final OpcodeVisitor v) {
+        v.visitLASTORE(this);
+    }
+
+}
