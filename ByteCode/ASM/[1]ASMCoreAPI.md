@@ -94,17 +94,290 @@ cp_info、field_info、method_info、attribute_info表示较为复杂的结构�
 本仓库参考位置：org.example.asm.classFile.ClassFileStructure    
 
 
+ClassFile 结构中的 field_info,在.class文件当中，定义的字段，要遵循field_info 结构    
+```
+field_info {
+    u2             access_flags;
+    u2             name_index;
+    u2             descriptor_index;
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+
+同样的，.class中定义的方法，也要遵循method_info的结构    
+```
+method_info {
+    u2             access_flags;
+    u2             name_index;
+    u2             descriptor_index;
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+在method_info 结构中，定义的方法体的代码，是存在于Code属性结构中的，结构如下所示：     
+```
+Code_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 max_stack;
+    u2 max_locals;
+    u4 code_length;
+    u1 code[code_length];
+    u2 exception_table_length;
+    {   u2 start_pc;
+        u2 end_pc;
+        u2 handler_pc;
+        u2 catch_type;
+    } exception_table[exception_table_length];
+    u2 attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+查看方法method_info内部的code_attribute ![org.example.asm.classFile.run.I_Attributes_Method](./../../images/[1]method_info_code.png)
+
+查看method_info中的code信息 指令和局部变量表 org.example.asm.classFile.run.K_Code_Locals
 
 + 5、如何编写ASM代码
 
+使用ASMPrint类将.class文件转换为ASM代码    
+
+
+
 ### 第二章 生成新的类 从0到1 从无到有 生成
 + 1、ClassVisitor介绍
+ClassVisitor是一个抽象类，需要具体的子类来实现，比较常见的ClassVisitor有 ClassWriter (Core API)和ClassNode类（tree API）    
+```java
+public class ClassWriter extends ClassVisitor{
+}
+```
+```java
+public class ClassNode extends ClassVisitor{
+    
+}
+```
+ClassVisitor定义的字段：    
+```java
+public abstract class ClassVisitor {
+    protected final int api;
+    protected ClassVisitor cv;
+}
+```
+api字段：它是一个int类型的数据，指出了当前使用的ASM api版本，其取值有Opcodes.ASM4 Opcodes.ASM5 Opcodes.ASM6 Opcodes.ASM7 Opcodes.ASM8 Opcodes.ASM9,我们使用的是ASM9 所以选择Opcodes.ASM9就行了    
+cv字段：他是一个ClassVisitor类型的数据，他的作用是将多个ClassVisitor串联起来    
+
+constructor字段：    
+```java
+public abstract class ClassVisitor {
+    public ClassVisitor(final int api) {
+        this(api, null);
+    }
+
+    public ClassVisitor(final int api, final ClassVisitor classVisitor) {
+        this.api = api;
+        this.cv = classVisitor;
+    }
+}
+```
+ClassVistor method:    
+
+第四个部分，ClassVisitor 类定义的方法有哪些。在 ASM 当中，使用到了 Visitor Pattern（访问者模式），所以 ClassVisitor 当中许多的 visitXxx() 方法。
+
+虽然，在 ClassVisitor 类当中，有许多 visitXxx() 方法，但是，我们只需要关注这 4 个方法：visit()、visitField()、visitMethod() 和 visitEnd()。
+
+为什么只关注这 4 个方法呢？因为这 4 个方法是 ClassVisitor 类的精髓或骨架，在这个“骨架”的基础上，其它的 visitXxx() 都容易扩展；同时，将 visitXxx() 方法缩减至 4 个，也能减少学习过程中的认知负担，学起来更容易。
+```java
+public abstract class ClassVisitor {
+    public void visit(
+        final int version,
+        final int access,
+        final String name,
+        final String signature,
+        final String superName,
+        final String[] interfaces);
+    public FieldVisitor visitField( // 访问字段
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value);
+    public MethodVisitor visitMethod( // 访问方法
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final String[] exceptions);
+    public void visitEnd();
+    // ......
+}
+```
+在 ClassVisitor 的 visit() 方法、visitField() 方法和 visitMethod() 方法中都带有 signature 参数。这个 signature 参数与“泛型”密切相关；换句话说，如果处理的是一个带有泛型信息的类、字段或方法，那么就需要给 signature 参数提供一定的值；如果处理的类、字段或方法不带有“泛型”信息，那么将 signature 参数设置为 null 就可以了。在本次课程当中，我们不去考虑“泛型”相关的内容，所以我们都将 signature 参数设置成 null 值。
+
+如果大家对 signature 参数感兴趣，我们可以使用之前介绍的 PrintASMCodeCore 类去打印一下某个泛型类的 ASM 代码。例如，java.lang.Comparable 是一个泛型接口，我们就可以使用 PrintASMCodeCore 类来打印一下它的 ASM 代码，从来查看 signature 参数的值是什么。    
+
+ClassVisitor方法的调用顺序：    
+在 ClassVisitor 类当中，定义了多个 visitXxx() 方法。这些 visitXxx() 方法，遵循一定的调用顺序（可参考 API 文档）：    
+```
+visit
+[visitSource][visitModule][visitNestHost][visitPermittedSubclass][visitOuterClass]
+(
+ visitAnnotation |
+ visitTypeAnnotation |
+ visitAttribute
+)*
+(
+ visitNestMember |
+ visitInnerClass |
+ visitRecordComponent |
+ visitField |
+ visitMethod
+)* 
+visitEnd
+```
+其中，涉及到一些符号，它们的含义如下：
+
+[]: 表示最多调用一次，可以不调用，但最多调用一次。    
+() 和 |: 表示在多个方法之间，可以选择任意一个，并且多个方法之间不分前后顺序。    
+*: 表示方法可以调用 0 次或多次。    
+
+我们只关注 ClassVisitor 类当中的 visit() 方法、visitField() 方法、visitMethod() 方法和 visitEnd() 方法这 4 个方法，所以上面的方法调用顺序可以简化如下：    
+```
+visit
+(
+ visitField |
+ visitMethod
+)* 
+visitEnd
+```
+也就是说，先调用 visit() 方法，接着调用 visitField() 方法或 visitMethod() 方法，最后调用 visitEnd() 方法。     
+
+visitXxx() 方法与 ClassFile:     
+
+ClassVisitor 的 visitXxx() 方法与 ClassFile 之间存在对应关系：
+
+ClassVisitor.visitXxx() --- .class --- ClassFile
+在 ClassVisitor 中定义的 visitXxx() 方法，并不是凭空产生的，这些方法存在的目的就是为了生成一个合法的 .class 文件，而这个 .class 文件要符合 ClassFile 的结构，所以这些 visitXxx() 方法与 ClassFile 的结构密切相关。
+
+visit()方法：
+```
+public void visit(
+    final int version,
+    final int access,
+    final String name,
+    final String signature,
+    final String superName,
+    final String[] interfaces);
+```
+对比visit方法与ClassFIle结构之间的关系：    
+```
+ClassFile {
+    u4             magic;
+    u2             minor_version;
+    u2             major_version;
+    u2             constant_pool_count;
+    cp_info        constant_pool[constant_pool_count-1];
+    u2             access_flags;
+    u2             this_class;
+    u2             super_class;
+    u2             interfaces_count;
+    u2             interfaces[interfaces_count];
+    u2             fields_count;
+    field_info     fields[fields_count];
+    u2             methods_count;
+    method_info    methods[methods_count];
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+
+visitField() 方法：    
+```
+public FieldVisitor visitField( // 访问字段
+    final int access,
+    final String name,
+    final String descriptor,
+    final String signature,
+    final Object value);
+```
+```
+field_info {
+    u2             access_flags;
+    u2             name_index;
+    u2             descriptor_index;
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+
+visitMethod() 方法:    
+```
+public MethodVisitor visitMethod( // 访问方法
+    final int access,
+    final String name,
+    final String descriptor,
+    final String signature,
+    final String[] exceptions);
+```
+```
+method_info {
+    u2             access_flags;
+    u2             name_index;
+    u2             descriptor_index;
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+visitEnd() 方法 :    
+visitEnd() 方法，它是这些 visitXxx() 方法当中最后一个调用的方法。
+
+为什么 visitEnd() 方法是“最后一个调用的方法”呢？是因为在 ClassVisitor 当中，定义了多个 visitXxx() 方法，这些个 visitXxx() 方法之间要遵循一个先后调用的顺序，而 visitEnd() 方法是最后才去调用的。
+
+等到 visitEnd() 方法调用之后，就表示说再也不去调用其它的 visitXxx() 方法了，所有的“工作”已经做完了，到了要结束的时候了。
+```
+/*
+ * Visits the end of the class.
+ * This method, which is the last one to be called,
+ * is used to inform the visitor that all the fields and methods of the class have been visited.
+ */
+public void visitEnd() {
+    if (cv != null) {
+        cv.visitEnd();
+    }
+}
+```
+
+
+
+
 + 2、ClassWriter介绍
+
+
+
+
+
+
+
+
 + 3、ClassWriter代码示例
+
+
+
 + 4、FieldVisitor介绍
+
+
+
 + 5、FieldWriter介绍
+
+
+
 + 6、MethodVisitor介绍
+
+
+
 + 7、MethodWriter介绍
+
+
+
 + 8、方法的初始Frame
   JVM Architecture由 Class Loader SubSystem,Runtime Data Areas和 Execution Engine三个部分组成 ，其中Runtime Data Areas包括Method Area 、Heap Area 、stack area 、PC Register和Native Method Stack等部分
 在程序运行的过程中，每个线程Thread 都对应都对应一个属于自己的JVM Stack当一个新线程开始的时候，就会在内存上分配一个属于自己的JVM Stack；当该线程执行结束的时候，相应JVM Stack内存空间也就被回收了
@@ -124,6 +397,8 @@ local variables是一个数组
  如果当前方法的参数是long double类型 那么它在local variable当中占用2个位置
   
 + 9、MethodVisitor代码示例
+
+
 + 10、label介绍
 
 程序设计中，有三种基本控制结构：顺序 选择 和循环，在bytecode层面，只存在两种 顺序（sequence）和跳转（jump）两种指令执行顺序 instruction

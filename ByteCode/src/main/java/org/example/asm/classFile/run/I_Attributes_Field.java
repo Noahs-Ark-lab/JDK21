@@ -14,7 +14,7 @@ import org.example.asm.classFile.goldstine.vs.Visitor;
 public class I_Attributes_Field {
     public static void main(String[] args) {
         // 第一步，输入参数
-        String relative_path = "sample/HelloWorld.class";
+        String relative_path = "org/example/asm/classFile/ClassFileStructure.class";
         String name_and_type = "intValue:I";
 
         // 第二步，读取数据

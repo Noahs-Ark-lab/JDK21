@@ -1,6 +1,6 @@
 package org.example.asm.classFile.goldstine.code.facet;
 
-import lsieun.code.Instruction;
+import org.example.asm.classFile.goldstine.code.Instruction;
 
 /**
  * <p>

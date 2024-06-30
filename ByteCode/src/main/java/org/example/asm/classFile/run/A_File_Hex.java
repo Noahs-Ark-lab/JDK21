@@ -7,8 +7,8 @@ import org.example.asm.classFile.goldstine.utils.ReadUtils;
 
 public class A_File_Hex {
     public static void main(String[] args) {
-        // 第一步，输入参数
-        String relative_path = "sample/HelloWorld.class";
+        // 第一步，输入参数  org.example.asm.classFile.ClassFileStructure
+        String relative_path = "org/example/asm/classFile/ClassFileStructure.class";
 
         // 第二步，读取数据
         String filepath = FileUtils.getFilePath(relative_path);

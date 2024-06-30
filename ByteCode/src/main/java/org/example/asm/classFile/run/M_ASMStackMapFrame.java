@@ -8,7 +8,7 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 public class M_ASMStackMapFrame {
     public static void main(String[] args) {
         try {
-            String relative_path = "sample/HelloWorld.class";
+            String relative_path = "org/example/asm/classFile/ClassFileStructure.class";
             String filepath = FileUtils.getFilePath(relative_path);
             byte[] bytes = dump();
             FileUtils.writeBytes(filepath, bytes);
