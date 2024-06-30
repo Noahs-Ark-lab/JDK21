@@ -42,9 +42,9 @@ public class StreamApi {
 
     // 快速空值过滤 Java 9 过滤集合中的所有空值
     public static void filterValue(){
-        List<String> strings = Arrays.asList("fei", "liu", null, "zhi", null, "xia", "san", "qian", "chi");
-        List<String> collect = strings.stream().flatMap(Stream::ofNullable).collect(Collectors.toList());
-        System.out.println(collect);
+//        List<String> strings = Arrays.asList("fei", "liu", null, "zhi", null, "xia", "san", "qian", "chi");
+//        List<String> collect = strings.stream().flatMap(Stream::ofNullable).collect(Collectors.toList());
+//        System.out.println(collect);
     }
 
     // 流式迭代
@@ -66,9 +66,9 @@ public class StreamApi {
 
     // 删除和截取
     public static void remove(){
-        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8);
-        numbers.stream().dropWhile(n->n<3)
-                .takeWhile(n->n<6).forEach(System.out::println);
+//        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8);
+//        numbers.stream().dropWhile(n->n<3)
+//                .takeWhile(n->n<6).forEach(System.out::println);
     }
 
     // 整数流 java8 用于快速生成整数流 常用的有以下几种方式  IntStream.range() 生成一个整数流，该整数流不包含结尾数字
@@ -82,12 +82,12 @@ public class StreamApi {
 
     // 应用多个收集器  Java 12
     public static void teeing(){
-        Stream<Integer> nums = Stream.of(1, 2, 3, 4);
-        Map<String,Integer> collect = nums.collect(Collectors
-                .teeing(Collectors.maxBy(Integer::compareTo),
-                        Collectors.minBy(Integer::compareTo),
-                        (e1,e2)->Map.of("min",e1.get(),"max",e2.get())));
-        System.out.println(collect);
+//        Stream<Integer> nums = Stream.of(1, 2, 3, 4);
+//        Map<String,Integer> collect = nums.collect(Collectors
+//                .teeing(Collectors.maxBy(Integer::compareTo),
+//                        Collectors.minBy(Integer::compareTo),
+//                        (e1,e2)->Map.of("min",e1.get(),"max",e2.get())));
+//        System.out.println(collect);
     }
 
     // 合并流
