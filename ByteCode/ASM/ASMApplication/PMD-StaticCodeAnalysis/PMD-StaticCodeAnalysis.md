@@ -45,7 +45,11 @@ macbook安装需要匹配版本。
 抽象语法树 运用广泛 比如： 
 + 编辑器的错误提示 代码格式化。代码高亮。代码自动补全
 + elint。pertiier  对代码错误或风格的检查
-+ webpack 通过babel转译javascript语法  （前段）
++ webpack 通过babel转译javascript语法  （前端）
+
+[AST更改代码](https://cloud.tencent.com/developer/article/1068846)。  
+[源代码级别AST/字节码级别ASM](https://houbb.github.io/2020/05/29/java-ast-00-overview)    
+[AST](https://sumsec.me/2022/CodeQL%E4%B8%8EAST%E4%B9%8B%E9%97%B4%E8%81%94%E7%B3%BB.html)
 
 
 ### 圈复杂度
