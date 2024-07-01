@@ -1,4 +1,4 @@
 
 ## Java Parser
 
-[Java Parser 抽象语法树](http://online.cbpmgt.com/online/process/pjDataView/Qy1kZG1hYS0tZGRrYWEtQ0ZFLWRkamFhLQ==/)
+[Java Parser 抽象语法树](https://houbb.github.io/2020/05/29/java-ast-01-javaparser)
