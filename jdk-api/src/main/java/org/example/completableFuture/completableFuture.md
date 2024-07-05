@@ -1,2 +1,7 @@
 
 ### completaleFuture简介
+CompletableFuture是有Java8引入的，之前一般使用Future实现异步。Future表示异步计算的结果，只能通过阻塞或者轮询的方式获取结果，而且不支持回调方法，Java8之前若要设置回调一般会使用guava的ListenableFuture
+
+CompletableFuture实现了两个接口，Future<T>  CompletionStage<T> 意味着可以像之前一样通过阻塞或者轮询的方式获得结果，Future表示异步计算的结果，CompletionStage<T> 用于表示异步执行过程中的一个步骤Stage，这个步骤可能是由另外一个CompletionStage触发的，随着当前步骤的完成，也可能会触发其它一系列CompletionStage的执行
+
+
