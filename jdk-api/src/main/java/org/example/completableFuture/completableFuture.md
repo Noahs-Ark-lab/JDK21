@@ -1,5 +1,19 @@
 
 ### completaleFuture简介
+
+使用Future的缺点：     
++ 在没有阻塞的情况下，无法对Future的结果执行进一步的操作，future不会告诉你他什么时候完成，如果想要得到结果，必须通过get()方法，该方法会阻塞直到结果可用为止，他不具备将回调函数附加到Future后并在Future结果可用时自动调用回调的能力
++ 无法解决任务互相依赖的问题 ,不能轻而易举地创建异步工作流
++ 不能将多个Future合并在一起
++ 没有异常处理
+
+CompletableFuture的优势     
++ 提供了适用于各种开发场景的回调函数，还提供了非常全面的异常处理机制
++ 无缝衔接lambda表达式和stream API
++ 把异步编程  函数式编程  响应式编程集于一身
+
+创建异步任务    
+CompletableFuture.runAsync()
 [CompletableFuture简介](https://juejin.cn/post/7209612932367089719)
 CompletableFuture是有Java8引入的，之前一般使用Future实现异步。Future表示异步计算的结果，只能通过阻塞或者轮询的方式获取结果，而且不支持回调方法，Java8之前若要设置回调一般会使用guava的ListenableFuture
 

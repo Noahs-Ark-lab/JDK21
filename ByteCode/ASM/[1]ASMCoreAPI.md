@@ -363,7 +363,10 @@ public void visitEnd() {
 
 
 + 4、FieldVisitor介绍
-
+通过调用ClassVisitor类的visitField()方法，会返回一个FieldVisitor对象
+```
+public FieldVisitor visitField(int access,String name,String descriptor,String signatrue,Object Value);
+```
 
 
 + 5、FieldWriter介绍
