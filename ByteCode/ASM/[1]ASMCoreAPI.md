@@ -488,9 +488,21 @@ visitTypelnsn:访问type指令，即将一个类的全限定名作为参数然�
 [ASM字节码操作类库(打开java语言世界通往字节码世界的大门](https://developer.jdcloud.com/article/3435)    
 [B站相关](https://www.bilibili.com/read/cv13433468/)    
 
-+ 12、frame介绍
++ 12、frame介绍    
+JVM Architecture由 ClassLoader subsystem ,Runtime Data Area , 和Execution Engine三个主要部分组成，其中Runtime Data Area包括Method Area,Heap Area,Stack Area,PC Registers和Native Method Stack部分    
+在编译的时候 localVariables 和operand stack的大小就已经确定了，在方法运行的过程中，方法里的数据需要放到local variables和operand stack上来进行计算，那么，在方法刚开始的时候，local variable和operand stack是一个什么样的状态    
+
+方法的初始Frame：    
+在方法刚开始的时候，operand stack 是空的，不需要存储任何的数据，而local variables的初始状态，则需要考虑三个因素：    
++ 当前方法是否为static方法，如果当前方法是non-static方法，则需要在local variables索引为0的位置存在一个this变量，如果当前方法是static方法，则不需要存储this
++ 当前方法是否接收参数，方法接收参数，会按照参数的声明顺序放到local variables当中
++ 方法参数是否包含long 和double类型，如果方法的参数是long或者double类型，那么它在local variables当中占用两个位置
+
+
+
+
 + 13、Opcodes介绍
-+
++ 
 
 
 ### 第三章 转换已有的类 class文件增强
