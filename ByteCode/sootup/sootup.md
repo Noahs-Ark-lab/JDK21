@@ -14,6 +14,7 @@ soot是McGill大学Sable研究小组自1996年开始开发的Java字节码分析
 
 ## 客户端命令  
 ### General Options
+```
 -coffi   使用旧的Coffi前端来解析Java字节码（而不是使用ASM）     
 -jasmin-backend   使用Jasmin后端生成Java字节码（而不是使用ASM）     
 -h,-help  显示帮助信息并退出     
@@ -31,9 +32,11 @@ soot是McGill大学Sable研究小组自1996年开始开发的Java字节码分析
 -debug。打印各种soot调试信息      
 -debug-resolver   从SootResolver打印调试信息       
 -ignore-resolving-levels 忽略不匹配的解析级别策略       
--weak-map-structures在场景中使用弱引用，以防止删除许多classes。methods或locals时内存泄漏        
+-weak-map-structures在场景中使用弱引用，以防止删除许多classes。methods或locals时内存泄漏
+```
 
 ### Input Options
+```
  -cp ARG -soot-class-path ARG -soot-classpath ARG。    
                                使用 ARG 参数作为查找类的类路径。      
  -soot-modulepath ARG          使用 ARG 参数作为查找类的模块路径。      
@@ -63,9 +66,11 @@ soot是McGill大学Sable研究小组自1996年开始开发的Java字节码分析
  -main-class ARG               ARG 参数指定整个待解析程序的主类。      
  -polyglot                     使用 Java 1.4 Polyglot 前端，而不是 JastAdd。      
  -permissive-resolving         当使用常规解析策略无法找到类时，使用替代的源文件      
- -drop-bodies-after-load       在完成加载方法主体 (The method body) 的任务后删除方法源 (The method source)。      
+ -drop-bodies-after-load       在完成加载方法主体 (The method body) 的任务后删除方法源 (The method source)。
+``` 
 
 ### output options
+```
  -d ARG -output-dir ARG        将输出文件保存到 ARG 参数指定的目录       
  -f ARG -output-format ARG     设置 Soot 的输出文件格式，支持下面列出的格式之一。     
     J jimple                     生成 .jimple 文件      
@@ -110,9 +115,11 @@ soot是McGill大学Sable研究小组自1996年开始开发的Java字节码分析
  -show-exception-dests         在转储的一个或多个 CFG 中包括异常处理目标边 (Exception Destination Edges) 以及 CFG 边      
  -gzip                         使用 GZip 算法对 IR (中间代码表示)的输出文件进行压缩      
  -force-overwrite              强制覆盖输出文件。      
-————————————————      
+————————————————
+```
 
 ### Processing Options
+```
  -plugin ARG                   加载 ARG 参数指定路径下的所有插件      
  -wrong-staticness ARG         忽略或修复由静态分析错误引发的错误，ARG 参数指定的错误提示级别可以是下面各项之一。      
     fail                         当检测到静态分析错误时引发错误      
@@ -142,9 +149,11 @@ soot是McGill大学Sable研究小组自1996年开始开发的Java字节码分析
  -trim-cfgs                    从 CFGs 中修剪不可实现的异常边(不可达边)         
  -ire, -ignore-resolution-errors       
                                当程序引用未声明的字段或方法时不会抛出异常。       
-————————————————        
+————————————————
+```
 
 ### Application Mode Options  
+```
  -i ARG -include ARG           将 ARG 参数指定的所有类作为应用程序类       
  -x ARG -exclude ARG           从应用程序类中排除 ARG 参数指定的所有类       
  -include-all                  设置默认排除包为空列表         
@@ -152,31 +161,39 @@ soot是McGill大学Sable研究小组自1996年开始开发的Java字节码分析
  -dynamic-dir ARG              将 ARG 参数指定文件夹中的所有类标记为潜在的动态链接文件      
  -dynamic-package ARG          将 ARG 参数指定的包中的类标记为潜在的动态链接文件       
 
-————————————————       
+————————————————
+```
 
 ### Input Attribute Options       
+```
  -keep-line-number             保留行号表        
- -keep-bytecode-offset, -keep-offset        附加字节码偏移到 IR (中间代码)       
+ -keep-bytecode-offset, -keep-offset        附加字节码偏移到 IR (中间代码)
+```     
 
 ### Output Attribute Options   
--write-local-annotations      在本地名称上写出调试注释       
+```
+-write-local-annotations      在本地名称上写出调试注释
+```
 
 
 ### Annotation Options
+```
  -annot-purity                 输出 纯度 (purity) 属性       
  -annot-nullpointer            输出 空指针 属性      
  -annot-arraybounds            输出 数组边界检查 属性       
  -annot-side-effect            输出 副作用 属性       
  -annot-fieldrw                输出 字段读/写 属性       
 
-————————————————       
+————————————————
+```  
 
 ### Miscellaneous options
+```
  -time                         报告转换所需的时间      
  -subtract-gc                  从时间中减去 gc       
  -no-writeout-body-releasing   禁止在写出 (Writeout) 之后释放方法体(Method Bodies)。此标志仅供在内部测试使用       
 ————————————————
-
+```
 
 ## Sootup
 [Learning Program Analysis](https://github.com/SugarP1g/Learning-Program-analysis)      
